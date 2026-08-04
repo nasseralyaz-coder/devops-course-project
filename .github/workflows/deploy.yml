@@ -34,6 +34,8 @@ jobs:
           password: ${{ secrets.EC2_PASSWORD }}
           envs: GITHUB_SHA
           script: |
+            aws ecr-public get-login-password --region us-east-1 \
+            | docker login --username AWS --password-stdin public.ecr.aws
             docker pull $ECR_REPO:${{ github.sha }}
             docker stop my-site || true
             docker rm my-site || true
